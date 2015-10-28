@@ -2,16 +2,14 @@
 
 using namespace std;
 
-// Implementation of LZW Encoding.
-int main() {
+void encode(string x) {
   int n, m, k=0, l=1, p, i;
-  string x, sub;
+  string sub;
   vector<string> d;
   vector<string> s;
   vector<int> c;
   vector<string>::iterator it1, it2;
 
-  cin >> x;
   cin >> m;
   n = x.size();
 
@@ -48,4 +46,16 @@ int main() {
   cout << endl << "d: ";
   for (i=0; i<d.size(); ++i) cout << d[i] << " ";
   cout << endl;
+}
+
+void decode(string[] d, int[] c) {
+
+} 
+
+// Implementation of LZW Encoding.
+int main() {
+  string s;
+  cin >> s;
+  encode(s);
+
 }
