@@ -48,14 +48,57 @@ void encode(string x) {
   cout << endl;
 }
 
-void decode(string[] d, int[] c) {
-
+void decode(vector<string> &d, vector<int> &c) {
+  cout << endl;
+  int i=0;
+  int code=c[i], old, n=d.size();
+  cout << d[code];
+  old = code;
+  i++;
+  while (i<n) {
+    code = c[i];
+    if (code<n) {
+      cout << d[code];
+      string oldt = d[old];
+      string kstr = d[code];
+      char k = kstr[0];
+      string tmp = "";
+      tmp += k;
+      tmp += oldt;
+      d.push_back(tmp);
+      cout << "tmp: " << tmp << endl;
+      old = code;
+    } else {
+      string oldt = d[old];
+      char k = oldt[0];
+      cout << (oldt+k);
+      old = code;
+    }
+    i++;
+  }
+  cout << endl;
 } 
 
 // Implementation of LZW Encoding.
 int main() {
-  string s;
-  cin >> s;
-  encode(s);
+  //string s;
+  //cin >> s;
+  //encode(s);
 
+  vector<string> d;
+  vector<int> c;
+  int m, n;
+  cin >> m >> n;
+  for (int i=0; i<m; ++i) {
+    string next;
+    cin >> next;
+    d.push_back(next);
+  }
+  for (int i=0; i<n; ++i) {
+    int next;
+    cin >> next;
+    c.push_back(next);
+  }
+  decode(d, c);
+  
 }
