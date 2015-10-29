@@ -66,7 +66,6 @@ void decode(vector<string> &d, vector<int> &c) {
       tmp += k;
       tmp += oldt;
       d.push_back(tmp);
-      cout << "tmp: " << tmp << endl;
       old = code;
     } else {
       string oldt = d[old];
@@ -80,10 +79,11 @@ void decode(vector<string> &d, vector<int> &c) {
 } 
 
 // Implementation of LZW Encoding.
+// TODO: OOP
 int main() {
-  //string s;
-  //cin >> s;
-  //encode(s);
+  string s;
+  cin >> s;
+  encode(s);
 
   vector<string> d;
   vector<int> c;
