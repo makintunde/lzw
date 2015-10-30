@@ -2,8 +2,16 @@
 
 using namespace std;
 
-void encode(string x) {
+void encode() {
   int n, m, k=0, l=1, p, i;
+
+  cout << "Enter:\n";
+  cout << " - The string to encode\n";
+  cout << " - n (length of the dictionary)\n";
+  cout << " - The n dictionary entries." << endl;
+
+  string x;
+  cin >> x;
   string sub;
   vector<string> d;
   vector<string> s;
@@ -41,64 +49,65 @@ void encode(string x) {
     }
   }
   
-  cout << "c: ";
-  for (i=0; i<c.size(); ++i) cout << c[i] << " ";
-  cout << endl << "d: ";
-  for (i=0; i<d.size(); ++i) cout << d[i] << " ";
+  cout << "--------------------------------------" << endl;
+  cout << "C: ";
+  for (i=0; i<c.size()-1; ++i) cout << c[i] << ", ";
+  cout << c[c.size()-1] << endl;
+  cout << endl << "D: ";
+  for (i=0; i<d.size()-1; ++i) cout << d[i] << ", ";
+  cout << d[d.size()-1] << endl;
+  cout << endl;
+  cout << "--------------------------------------" << endl;
   cout << endl;
 }
 
-void decode(vector<string> &d, vector<int> &c) {
-  cout << endl;
-  int i=0;
-  int code=c[i], old, n=d.size();
-  cout << d[code];
-  old = code;
-  i++;
-  while (i<n) {
-    code = c[i];
-    if (code<n) {
-      cout << d[code];
-      string oldt = d[old];
-      string kstr = d[code];
-      char k = kstr[0];
-      string tmp = "";
-      tmp += k;
-      tmp += oldt;
-      d.push_back(tmp);
-      old = code;
-    } else {
-      string oldt = d[old];
-      char k = oldt[0];
-      cout << (oldt+k);
-      old = code;
-    }
-    i++;
-  }
-  cout << endl;
-} 
-
-// Implementation of LZW Encoding.
-// TODO: OOP
-int main() {
-  string s;
-  cin >> s;
-  encode(s);
-
-  vector<string> d;
-  vector<int> c;
-  int m, n;
-  cin >> m >> n;
+void decode() {
+  vector<string> d; // Dictionary.
+  vector<int> c; // Code.
+  int m;
+  cout << "Enter:\n";
+  cout << " - m (Number of elements in the dictionary)\n";
+  cout << " - The entries of the dictionary." << endl;
+  cin >> m;
   for (int i=0; i<m; ++i) {
     string next;
     cin >> next;
     d.push_back(next);
   }
+
+  cout << "Enter:\n";
+  cout << " - n (The number of elements in the code)\n";
+  cout << " - The n entries of the code." << endl;
+  int n;
+  string x;
+  cin >> n;
   for (int i=0; i<n; ++i) {
     int next;
     cin >> next;
     c.push_back(next);
   }
-  decode(d, c);
-  
+  cout << endl;
+  cout << "--------------------------------------" << endl;
+  for (int i=0; i<n; ++i) {
+    x.append(d[c[i]]);
+    string s="";
+    s += d[c[i]];
+    if (i<n-1) {
+      int index = c[i+1]%d.size();
+      s += d[index].at(0);
+    }
+    d.push_back(s);
+  }
+  cout << "X: " << x << endl;
+  cout << "D: ";
+  for (int i=0; i<d.size()-1; ++i) cout << d[i] << ", ";
+  cout << d[d.size()-1] << endl;
+  cout << "--------------------------------------" << endl;
+} 
+
+// Implementation of LZW Encoding and Decoding.
+// TODO: OOP version.
+int main() {
+  encode();
+  decode();
 }
