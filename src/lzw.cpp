@@ -4,14 +4,40 @@
 
 using namespace std;
 
-vector<int> encode(string x, vector<string> &d) {
-  int n, m, k = 0, l = 1, p, i;
-
+void print_encode_instructions() {
   cout << "Enter:\n";
   cout << " - The string to encode\n";
   cout << " - n (length of the dictionary)\n";
   cout << " - The n dictionary entries." << endl;
+}
 
+void print_str_results(string name, vector<string> &a) {
+  cout << "--------------------------------------" << endl;
+  cout << name << ": ";
+  size_t n = a.size();
+  for ( int i = 0; i < n - 1; ++i ) cout << a[i] << ", ";
+  cout << a[ n - 1 ] << endl;
+  cout << "--------------------------------------" << endl;
+  cout << endl;
+}
+
+void print_results(string name, vector<int> &a) {
+  cout << "--------------------------------------" << endl;
+  cout << name << ": ";
+  size_t n = a.size();
+  for ( int i = 0; i < n - 1; ++i ) cout << a[i] << ", ";
+  cout << a[ n - 1 ] << endl;
+  cout << "--------------------------------------" << endl;
+  cout << endl;
+}
+
+// Encode a string using LZW given a corresponding dictionary.
+// TODO: Use an 'encoder' object with accessors for private code and 
+// updated dictionary fields.
+vector<int> encode(string x, vector<string> &d) {
+  int n, m, k = 0, l = 1, p, i;
+
+  //print_encode_instructions();
   //string x;
   //cin >> x;
   string sub;
@@ -32,37 +58,38 @@ vector<int> encode(string x, vector<string> &d) {
   }
 
   // Iterate through string x.
-  while ( k + l < n ) {
-    // Find longest substring of x starting at index k in d.
-    sub = x.substr( k, l );
-    it1 = find( d.begin(), d.end(), sub );
-    while ( it1 != d.end() ) {
-      it2 = it1;
-      if ( k + l == n ) break;
-      l++;
-      sub = x.substr( k, l );
-      it1 = find( d.begin(), d.end(), sub );
-    }
-    p = distance(d.begin(), it2);
-    c.push_back( p );
-    if ( k + l < n) {
-      d.push_back( sub );
-      k += l - 1;
-      l = 1;
+  string w = "";
+  stringstream ss;
+  i = 0;
+  for (auto c_it = x.begin(); c_it < x.end(); c_it++) {
+    cout << "k: " << *c_it << endl;
+    char k = *c_it;
+    string next = w + k;
+    cout << "next: " << next << endl;
+    auto it = find(d.begin(), d.end(), next);
+    if (it != d.end()) {
+      w = next;
+    } else {
+      if (w.size() > 0) {
+        cout << "w: " << w << endl;
+        size_t p = distance(d.begin(), find(d.begin(), d.end(), w));
+        cout << "p: " << p << endl;
+        c.push_back(p);
+      }
+      d.push_back(w + k);
+      print_results("c", c);
+      print_str_results("d", d);
+      ss.clear();
+      ss.str(string());
+      ss << k;
+      ss >> w;
+      cout << "new w: " << w << endl;
+      if (c_it == x.end()-1) c.push_back(distance(d.begin(), find(d.begin(), d.end(), w)));
     }
   }
-  
-  cout << "--------------------------------------" << endl;
-  cout << "C: ";
-  for ( i = 0; i < c.size() - 1; ++i ) cout << c[i] << ", ";
-  cout << c[ c.size() - 1 ] << endl;
-  cout << endl << "D: ";
-  for ( i = 0; i < d.size() - 1; ++i ) cout << d[i] << ", ";
-  cout << d[ d.size() - 1 ] << endl;
-  cout << endl;
-  cout << "--------------------------------------" << endl;
-  cout << endl;
-  return d;
+  //print_results("C", c);
+  //print_results("D", d);
+  return c;
 }
 
 void decode() {
@@ -103,18 +130,21 @@ void decode() {
     d.push_back( s );
   }
   cout << "X: " << x << endl;
-  cout << "D: ";
-  for ( int i = 0; i < d.size() - 1; ++i ) cout << d[i] << ", ";
-  cout << d[d.size() - 1] << endl;
-  cout << "--------------------------------------" << endl;
+  // print_results("D", d);
 } 
 
-TEST_CASE( "Can correctly encode the following string" "[encode]" ) {
+TEST_CASE( "Can correctly encode strings" ) {
   vector<string> vec_1 = {"a", "b", "c", "d", "r"}; 
   vector<string> vec_2 = {"i", "m", "p", "s"};
+  vector<string> vec_3 = {"a", "b"};
 
-  REQUIRE( encode( "abracadabra", vec_1 ) == {0, 1, 4, 0, 2, 0, 3, 5, 7} );
-  REQUIRE( encode( "missisippi", vec_2 ) == {1, 0, 3, 3, 5, 7, 2, 2, 0} );
+  vector<int> exp_1 = {0, 1, 4, 0, 2, 0, 3, 5, 7};
+  vector<int> exp_2 = {1, 0, 3, 3, 5, 7, 2, 2, 0};
+  vector<int> exp_3 = {0, 1, 2, 4, 3};
+  
+  REQUIRE( encode( "mississippi", vec_2 ) == exp_2); // <- Not passing?
+  REQUIRE( encode( "abracadabra", vec_1 ) == exp_1);
+  REQUIRE( encode( "ababababa", vec_3 ) == exp_3);
 }
 
 // Implementation of LZW Encoding and Decoding.
