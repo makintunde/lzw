@@ -1,9 +1,7 @@
+#include "lzw.h"
 // Implementation of LZW Encoding and Decoding.
 // TODO: OOP version (to allow mocking?)
 
-// Encode a string using LZW given a corresponding dictionary.
-// TODO: Use an 'encoder' object with accessors for private code and 
-// updated dictionary fields.
 vector<int> encode(string x, vector<string> d) {
   vector<int> c;
   string w = "";

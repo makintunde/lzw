@@ -1,9 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "../src/lzw_utils.h"
-#include "../src/lzw.h"
-#include <vector>
-#include <string>
+#include "lzw.h"
 
 TEST_CASE( "Can correctly encode strings" ) {
   vector<string> d_1 = {"a", "b", "c", "d", "r"}; 

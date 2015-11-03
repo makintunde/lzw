@@ -1,6 +1,5 @@
 #include "lzw_utils.h"
 
-
 void print_encode_instructions() {
   cout << "Enter:\n";
   cout << " - The string to encode\n";
