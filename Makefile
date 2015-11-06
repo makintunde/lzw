@@ -1,26 +1,26 @@
 INC_DIR = include
 CFLAGS = -Wall -std=c++11 -I$(INC_DIR)
+TARGETS = test_suite
 
-.PHONY: all
-	all: $(TARGETS)
+all: $(TARGETS)
 
-.PHONY: clean
-	clean:
-		$(RM) $(TARGETS) *.o
+clean:
+	$(RM) $(TARGETS) *.o
 
-test: test.o
-	g++ -o $(CFLAGS) testing test.o
 
-test.o: test/test.cpp include/catch.hpp 
-	g++ -c $(CFLAGS) test/test.cpp
+test_suite: test.o lzw.o
+	g++ test.o lzw.o -o test_suite 
 
-#lzw: lzw.o lzw_utils.o
-#	g++ -o $(CFLAGS) lzw.o lzw_utils.o
+test.o: test/test.cpp include/catch.hpp include/lzw.h
+	g++  $(CFLAGS) -c test/test.cpp
 
-#lzw.o: src/lzw.cpp include/lzw.h
-#	g++ -c $(CFLAGS) src/lzw.cpp
+lzw: lzw.o lzw_utils.o
+	g++  $(CFLAGS) -o lzw.o lzw_utils.o
 
-#lzw_utils.o: src/lzw_utils.cpp include/lzw_utils.h
-#	g++ -c $(CFLAGS) src/lzw_utils.cpp
+lzw.o: src/lzw.cpp include/lzw.h
+	g++  $(CFLAGS) -c src/lzw.cpp
+
+lzw_utils.o: src/lzw_utils.cpp include/lzw_utils.h
+	g++  $(CFLAGS) -c src/lzw_utils.cpp
 
 
