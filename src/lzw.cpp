@@ -1,30 +1,35 @@
 #include "lzw.h"
 // Implementation of LZW Encoding and Decoding.
-// TODO: OOP version (to allow mocking?)
+// TODO: OOP version.
 
-vector<int> encode(string x, vector<string> d) {
-  vector<int> c;
+Compressor::Compressor() { x_ = ""; }
+
+void Compressor::set_x(string x) { x_ = x; }
+void Compressor::set_d(vector<string> d) { d_ = d; }
+void Compressor::set_c(vector<int> c) { c_ = c; }
+
+void Compressor::encode() {
   string w = "";
   stringstream ss;
-  int m = d.size();
-  int n = x.size();
+  int m = d_.size();
+  int n = x_.size();
 
   // Iterate through string x.
-  for (auto c_it = x.begin(); c_it < x.end(); c_it++) {
+  for (auto c_it = x_.begin(); c_it < x_.end(); c_it++) {
     char k = *c_it;
     string next = w + k;
-    auto it = find(d.begin(), d.end(), next);
+    auto it = find(d_.begin(), d_.end(), next);
 
-    if (it != d.end()) {
+    if (it != d_.end()) {
       w = next;
-      if (c_it == x.end() - 1)
-        c.push_back(distance(d.begin(), find(d.begin(), d.end(), w)));
+      if (c_it == x_.end() - 1)
+        c_.push_back(distance(d_.begin(), find(d_.begin(), d_.end(), w)));
     } else {
       if (w.size() > 0) {
-        size_t p = distance(d.begin(), find(d.begin(), d.end(), w));
-        c.push_back(p);
+        size_t p = distance(d_.begin(), find(d_.begin(), d_.end(), w));
+        c_.push_back(p);
       }
-      d.push_back(w + k);
+      d_.push_back(w + k);
 
       // Ensure that string stream is cleared after each iteration.
       ss.clear();
@@ -34,30 +39,29 @@ vector<int> encode(string x, vector<string> d) {
       ss << k;
       ss >> w;
 
-      if (c_it == x.end() - 1)
-        c.push_back(distance(d.begin(), find(d.begin(), d.end(), w)));
+      if (c_it == x_.end() - 1)
+        c_.push_back(distance(d_.begin(), find(d_.begin(), d_.end(), w)));
     }
   }
-  return c;
+  //return c;
 }
 
 // Decode a code into its original string, given a dictionary and a code.
-string decode(vector<string> d, vector<int> c) {
-  int m = d.size();
-  int n = c.size();
-  string x;
+void Compressor::decode() {
+  int m = d_.size();
+  int n = c_.size();
 
   for ( int i = 0; i < n; ++i ) {
-    x.append( d[c[i]] );
+    x_.append( d_[c_[i]] );
     string s = "";
-    s += d[c[i]];
+    s += d_[c_[i]];
     if (i < n - 1) {
-      int index = c[i + 1] % d.size();
-      s += d[index].at( 0 );
+      int index = c_[i + 1] % d_.size();
+      s += d_[index].at( 0 );
     }
-    d.push_back( s );
+    d_.push_back( s );
   }
-  return x;
+  //return x_;
 } 
 
 
