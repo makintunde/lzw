@@ -1,1 +1,2 @@
-# lzw
+# [LZW](https://en.wikipedia.org/wiki/Lempel–Ziv–Welch)
+Lempel-Ziv-Welch (LZW) is a universal lossless data compression algorithm created by Abraham Lempel, Jacob Ziv, and Terry Welch. It is the algorithm of the widely used Unix file compression utility [Compress](https://en.wikipedia.org/wiki/Compress), and is widely used in the [GIF](https://en.wikipedia.org/wiki/GIF) image format.
