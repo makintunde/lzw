@@ -5,14 +5,20 @@
 Compressor::Compressor() { x_ = ""; }
 
 void Compressor::set_x(string x) { x_ = x; }
+
 void Compressor::set_d(vector<string> d) { d_ = d; }
+
 void Compressor::set_c(vector<int> c) { c_ = c; }
+
+vector<int> Compressor::get_c() { return c_; }
+
+vector<string> Compressor::get_d() { return d_; }
+
+string Compressor::get_x() { return x_; }
 
 void Compressor::encode() {
   string w = "";
   stringstream ss;
-  int m = d_.size();
-  int n = x_.size();
 
   // Iterate through string x.
   for (auto c_it = x_.begin(); c_it < x_.end(); c_it++) {
@@ -43,12 +49,10 @@ void Compressor::encode() {
         c_.push_back(distance(d_.begin(), find(d_.begin(), d_.end(), w)));
     }
   }
-  //return c;
 }
 
 // Decode a code into its original string, given a dictionary and a code.
 void Compressor::decode() {
-  int m = d_.size();
   int n = c_.size();
 
   for ( int i = 0; i < n; ++i ) {
@@ -61,7 +65,6 @@ void Compressor::decode() {
     }
     d_.push_back( s );
   }
-  //return x_;
 } 
 
 
